@@ -8,66 +8,106 @@ import Spinner from '../layout/Spinner';
 import classnames from 'classnames';
 
 class DoctorDetails extends Component {
-//     state={
-//         showBalanceUpdate: false,
-//         balanceUpdateAmount: ''    
-//     };
+    state={
+        showDetails: true,
+        patientCount : ''    
+    };
 
-//     //Update Balance
-//     balanceSubmit = e =>{
-//         e.preventDefault();
+    //DownCount
+    downCount = e =>{
+        e.preventDefault();
 
-//         //console.log(this.state.balanceUpdateAmount);
-//         const { client, firestore}=this.props;
-//         const { balanceUpdateAmount }=this.state;
+        // console.log('Work');
+        const { doctor, firestore}=this.props;
+        const { patientCount }=this.state;
 
-//         const clientUpdate={
-//             balance: parseFloat(balanceUpdateAmount)
-//         }
+        const doctorUpdate={
+            count: doctor.count-1
+        }
 
-//         //Update in fireStore
-//         firestore.update({collection: 'clients', doc:client.id}, clientUpdate);
-//     }
-//     //Delete Client
-//     onDeleteClick=()=>{
-//         const { client, firestore, history} = this.props;
+        //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
 
-//         firestore
-//             .delete({collection: 'clients', doc:client.id})
-//             .then(history.push('/'));
-//     }
+    }
+
+    //Count Up
+    upCount = e =>{
+        e.preventDefault();
+
+        // console.log('Work');
+        const { doctor, firestore}=this.props;
+        const { patientCount }=this.state;
+
+        const doctorUpdate={
+            count: doctor.count+1
+        }
+
+        //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+
+    }
+
+    //Update Balance
+    countSubmit = e =>{
+        e.preventDefault();
+
+        // console.log(this.state.patientCount);
+        const { doctor, firestore}=this.props;
+        const { patientCount }=this.state;
+
+        const doctorUpdate={
+            count: parseInt(patientCount)
+        }
+
+        //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+    }
+    //Delete Doctor
+    onDeleteClick=()=>{
+        const { doctor, firestore, history} = this.props;
+
+        firestore
+            .delete({collection: 'doctors', doc:doctor.id})
+            .then(history.push('/'));
+    }
     
 
-//     onChange=e=> this.setState({[e.target.name] : e.target.value});
+    onChange=e=> this.setState({[e.target.name] : e.target.value});
 
 
   render() {
       const { doctor }=this.props;
-    //   const { showBalanceUpdate, balanceUpdateAmount }=this.state;
+      const { showDetails, patientCount }=this.state;
 
-    //   let balanceForm ='';
-    //   //if balance form should display
-    //   if(showBalanceUpdate){
-    //       balanceForm=(
-    //           <form onSubmit={this.balanceSubmit}>
-    //               <div className="input-group">
-    //                 <input 
-    //                     type="text"
-    //                     className="form-control" 
-    //                     name="balanceUpdateAmount"
-    //                     placeholder="Add New Balance"
-    //                     value={balanceUpdateAmount}
-    //                     onChange={this.onChange}
-    //                 />
-    //                 <div className="input-group-append">
-    //                     <input type="submit" value="Update" className="btn btn-outline-dark" />
-    //                 </div>
-    //               </div>
-    //           </form>
-    //       )
-    //   }else{
-    //       balanceForm=null;
-    //   }
+      let countForm ='';
+      //if balance form should display
+      if(showDetails){
+        countForm=(
+              <form onSubmit={this.countSubmit}>
+                  <div className="input-group">
+                    <input 
+                        type="text"
+                        className="form-control" 
+                        name="patientCount"
+                        placeholder="Add updated Patient Number"
+                        value={patientCount}
+                        onChange={this.onChange}
+                    />
+                    <div className="input-group-append">
+                        <input type="submit" value="Update" className="btn btn-outline-dark" />
+                    </div>
+                    <div className="input-group-append" onClick={this.downCount}>
+                        <span className="btn btn-outline-dark">Down</span>
+                    </div>
+                    <div className="input-group-append">
+                        <span className="btn btn-outline-dark" onClick={this.upCount}>Up</span>
+                    </div>
+                  </div>
+              </form>
+          )
+      }else{
+        countForm=null;
+      }
 
       if(doctor){
         return (
@@ -117,12 +157,12 @@ class DoctorDetails extends Component {
                                     {' '} {parseInt(doctor.totalCount)} {'     '}
                                 </span>
                                 <small>
-                                    <a href="#!" onClick={()=>this.setState({ showBalanceUpdate: !this.state.showBalanceUpdate})}>
+                                    <a href="#!" onClick={()=>this.setState({ showDetails: !this.state.showDetails})}>
                                         {'  '}<i className="fas fa-pencil-alt"></i>
                                     </a>  
                                 </small>
                             </h3>       
-                            {/* {balanceForm} */}
+                            {countForm}
                         </div>
                     </div>
 
