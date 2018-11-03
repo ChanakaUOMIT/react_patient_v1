@@ -10,8 +10,61 @@ import classnames from 'classnames';
 class DoctorDetails extends Component {
     state={
         showDetails: true,
-        patientCount : ''    
+        patientCount : '',
+        totalPatient: ''    
     };
+
+    //Update Total Patient
+    updateTotalPatient = e =>{
+        e.preventDefault();
+
+        console.log(this.state.totalPatient);
+        const { doctor, firestore}=this.props;
+        const { totalPatient }=this.state;
+
+        const doctorUpdate={            
+            totalCount: (parseInt(totalPatient)).toString()
+        }
+
+            //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+        
+    }
+
+    //Up Total Count
+    upTotalCount = e =>{
+        e.preventDefault();
+
+        //  console.log('Work total');
+        const { doctor, firestore}=this.props;
+        const { patientCount }=this.state;
+       
+        const doctorUpdate={            
+            totalCount: (parseInt(doctor.totalCount)+1).toString()
+        }
+
+        //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+        
+    }
+
+    //Down Total Patient
+    downTotalCount = e =>{
+        e.preventDefault();
+
+        // console.log('Work');
+        const { doctor, firestore}=this.props;
+        const { patientCount }=this.state;
+
+        if(doctor.totalCount>0){
+            const doctorUpdate={            
+                totalCount: (parseInt(doctor.totalCount)-1).toString()
+            }
+
+            //Update in fireStore
+        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+        }
+    }
 
     //DownCount
     downCount = e =>{
@@ -21,13 +74,14 @@ class DoctorDetails extends Component {
         const { doctor, firestore}=this.props;
         const { patientCount }=this.state;
 
-        const doctorUpdate={
-            count: doctor.count-1
-        }
+        if(doctor.count>0){
+            const doctorUpdate={            
+                count: doctor.count-1
+            }
 
-        //Update in fireStore
+            //Update in fireStore
         firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
-
+        }
     }
 
     //Count Up
@@ -38,13 +92,14 @@ class DoctorDetails extends Component {
         const { doctor, firestore}=this.props;
         const { patientCount }=this.state;
 
-        const doctorUpdate={
-            count: doctor.count+1
-        }
-
-        //Update in fireStore
-        firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
-
+        if(doctor.count<doctor.totalCount){
+            const doctorUpdate={
+                count: doctor.count+1
+            }
+    
+            //Update in fireStore
+            firestore.update({collection: 'doctors', doc:doctor.id}, doctorUpdate);
+        }        
     }
 
     //Update Balance
@@ -77,7 +132,7 @@ class DoctorDetails extends Component {
 
   render() {
       const { doctor }=this.props;
-      const { showDetails, patientCount }=this.state;
+      const { showDetails, patientCount, totalPatient }=this.state;
 
       let countForm ='';
       //if balance form should display
@@ -86,7 +141,7 @@ class DoctorDetails extends Component {
               <form onSubmit={this.countSubmit}>
                   <div className="input-group">
                     <input 
-                        type="text"
+                        type="number"
                         className="form-control" 
                         name="patientCount"
                         placeholder="Add updated Patient Number"
@@ -101,6 +156,30 @@ class DoctorDetails extends Component {
                     </div>
                     <div className="input-group-append">
                         <span className="btn btn-outline-dark" onClick={this.upCount}>Up</span>
+                    </div>
+                  </div>
+                  <hr />
+
+                {/* Update Total Patient */}
+                  <div className="input-group">
+                    <input 
+                        type="number"
+                        className="form-control" 
+                        name="totalPatient"
+                        placeholder="Add Total Patient"
+                        value={totalPatient}
+                        onChange={this.onChange}
+                    />
+                    <div className="input-group-append" onClick={this.updateTotalPatient}>
+                    <span className="btn btn-outline-dark">Update</span>
+                    </div>
+
+                    <div className="input-group-append" onClick={this.downTotalCount}>
+                        <span className="btn btn-outline-dark">Down</span>
+                    </div>
+
+                    <div className="input-group-append">
+                        <span className="btn btn-outline-dark" onClick={this.upTotalCount}>Up</span>
                     </div>
                   </div>
               </form>

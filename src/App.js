@@ -7,6 +7,7 @@ import AppNavbar from './components/layout/AppNavbar';
 import Dashboard from './components/layout/Dashboard';
 import AddDoctor from './components/doctors/AddDoctor';
 import DoctorDetails from './components/doctors/DoctorDetails';
+import EditDoctor from './components/doctors/EditDoctor';
 
 class App extends Component {
   render() {
@@ -34,6 +35,13 @@ class App extends Component {
                 path="/doctor/:id"
                 component={DoctorDetails}
               />
+
+              <Route 
+                exact
+                path="/doctor/edit/:id"
+                component={EditDoctor}
+              />
+
 
             </Switch>
           </div>
