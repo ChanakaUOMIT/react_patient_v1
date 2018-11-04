@@ -38,6 +38,7 @@ class EditDoctor extends Component {
     }
   render() {
       const { doctor } =this.props;
+    //   const { disableBalance}
 
     if( doctor ){
         return (
@@ -147,7 +148,8 @@ export default compose(
     firestoreConnect(props => [
         { collection:'doctors', storeAs:'doctor', doc: props.match.params.id}
     ]),
-    connect(({ firestore: { ordered }}, props) => ({
-        doctor: ordered.doctor && ordered.doctor[0]
+    connect(({ firestore: { ordered }, settings }, props) => ({
+        doctor: ordered.doctor && ordered.doctor[0],
+        settings
     }))
   )(EditDoctor);

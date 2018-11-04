@@ -14,7 +14,7 @@ class AddDoctor extends Component {
     phone:'',
     field:'',
     totalCount:'0',
-    count:'0'
+    count:0
   };
 
   onChange=e=>{
@@ -38,14 +38,14 @@ class AddDoctor extends Component {
       <div>
         <div className="row">
           <div className="col-md-6">
-            <Link to="/doctors" className="btn btn-link">
+            <Link to="/" className="btn btn-link">
               <i className="fas fa-arrow-circle-left "></i> Back To Doctor Panel
             </Link>
           </div>
         </div>
 
         <div className="card">
-            <div className="card-header">Add Client</div>
+            <div className="card-header">Add Doctor</div>
             <div className="card-body">
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
@@ -120,7 +120,7 @@ class AddDoctor extends Component {
         </div>
       </div>
     );
-  }
+  } 
 }
 
 AddDoctor.propTypes={
